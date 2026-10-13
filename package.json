@@ -1,0 +1,19 @@
+{
+  "name": "firehub-tv",
+  "version": "1.0.0",
+  "description": "Smart Ambient Living-Room Dashboard for Amazon Fire TV (10-foot UI)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "fire-tv",
+    "amazon-hackathon",
+    "10-foot-ui",
+    "spatial-navigation",
+    "dashboard"
+  ],
+  "author": "Akshaya Reddy",
+  "license": "MIT",
+  "type": "module"
+}

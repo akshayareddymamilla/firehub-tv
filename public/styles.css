@@ -1,0 +1,589 @@
+/* ==========================================================================
+   FireHub — 10-Foot UI Styling for Amazon Fire TV
+   Design Specifications:
+   - 10-foot glanceable typography and high contrast
+   - 5% TV Overscan Safe-Zone boundary padding
+   - Amazon Cyan (#00A8E1) glowing focus ring with smooth spatial transitions
+   ========================================================================== */
+
+:root {
+  --bg-deep: #0a0e14;
+  --bg-card: rgba(22, 30, 42, 0.85);
+  --bg-card-hover: rgba(30, 42, 60, 0.95);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  
+  --amazon-cyan: #00A8E1;
+  --amazon-orange: #FF9900;
+  --text-primary: #FFFFFF;
+  --text-secondary: #9AA7B5;
+  --text-muted: #5E6D7E;
+  
+  --accent-green: #00E676;
+  --focus-glow: 0 0 30px rgba(0, 168, 225, 0.8), 0 0 10px rgba(0, 168, 225, 0.5);
+  --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow: hidden;
+  user-select: none;
+  position: relative;
+}
+
+/* TV Canvas Safe-Zone: 5% boundary to prevent TV edge clipping (overscan) */
+.tv-canvas {
+  width: 100vw;
+  height: 100vh;
+  padding: 4vh 5vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 10;
+}
+
+/* Ambient Radial Glow */
+.ambient-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 20% 15%, rgba(0, 168, 225, 0.15) 0%, transparent 60%),
+              radial-gradient(circle at 85% 85%, rgba(255, 153, 0, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.8s ease;
+}
+
+/* ==========================================================================
+   Header: Brand, Time & Ambient Status
+   ========================================================================== */
+.tv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2vh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.fire-badge {
+  background: var(--amazon-orange);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.brand-title {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.brand-title span {
+  color: var(--amazon-cyan);
+}
+
+.clock-widget {
+  text-align: center;
+}
+
+.clock-widget .time {
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.clock-widget .time .seconds {
+  font-size: 1.6rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.clock-widget .date {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.system-status .status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 10px var(--accent-green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* ==========================================================================
+   Dashboard Grid (3 Columns)
+   ========================================================================== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.2vw;
+  flex: 1;
+  margin-bottom: 2.5vh;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 2.5vh 2vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(16px);
+  transition: all 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+  position: relative;
+  outline: none;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5vh;
+}
+
+.card-tag {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--amazon-cyan);
+  letter-spacing: 1px;
+}
+
+.card-icon {
+  font-size: 1.8rem;
+}
+
+.card-count {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Card 1: Weather Details */
+.weather-hero {
+  margin: 1.5vh 0;
+}
+
+.weather-temp {
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+.weather-condition {
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.weather-details {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+
+.good-badge {
+  color: var(--accent-green);
+}
+
+/* Card 2: Tasks List */
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.task-item .check-box {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  border: 2px solid var(--text-muted);
+  color: transparent;
+}
+
+.task-item.completed {
+  opacity: 0.75;
+}
+
+.task-item.completed .check-box {
+  background: var(--amazon-cyan);
+  border-color: var(--amazon-cyan);
+  color: #000;
+  font-weight: 900;
+}
+
+.task-item.completed .task-title {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+}
+
+/* Card 3: Notes & Bulletin */
+.note-quote {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: #E2E8F0;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.note-author {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.quick-tags {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.tag {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--amazon-orange);
+  font-weight: 600;
+}
+
+.card-action-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 12px;
+  text-align: right;
+}
+
+.card-action-hint b {
+  color: var(--amazon-cyan);
+}
+
+/* ==========================================================================
+   AI Briefing Banner
+   ========================================================================== */
+.ai-briefing-card {
+  background: linear-gradient(90deg, rgba(22, 30, 42, 0.95) 0%, rgba(13, 37, 54, 0.95) 100%);
+  border: 2px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 1.8vh 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  transition: all 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+  outline: none;
+}
+
+.briefing-badge {
+  background: linear-gradient(135deg, #FF9900 0%, #FF5500 100%);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.briefing-text {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #F1F5F9;
+  flex: 1;
+}
+
+.briefing-action {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.briefing-action b {
+  color: var(--amazon-cyan);
+}
+
+/* ==========================================================================
+   10-Foot UI Glowing Focus State (Fire TV Standard)
+   ========================================================================== */
+.focusable.focused,
+.focusable:focus {
+  outline: 3px solid var(--amazon-cyan) !important;
+  box-shadow: var(--focus-glow) !important;
+  transform: translateY(-4px) scale(1.02);
+  background: var(--bg-card-hover);
+  z-index: 20;
+}
+
+.focusable.focused .card-tag {
+  color: var(--amazon-orange);
+}
+
+/* ==========================================================================
+   Helper Bar
+   ========================================================================== */
+.tv-helper-bar {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding-top: 1vh;
+}
+
+.key-pill {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: #FFF;
+  font-family: monospace;
+  font-weight: 700;
+}
+
+.remote-toggle-pill {
+  margin-left: auto;
+  cursor: pointer;
+  background: rgba(0, 168, 225, 0.15);
+  border: 1px solid var(--amazon-cyan);
+  color: var(--amazon-cyan);
+  padding: 4px 14px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.remote-toggle-pill:hover {
+  background: var(--amazon-cyan);
+  color: #000;
+}
+
+/* ==========================================================================
+   Virtual Fire TV Remote Control Simulator (Floating On-Screen)
+   ========================================================================== */
+.remote-simulator {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  width: 220px;
+  background: #18191C;
+  border: 2px solid #333942;
+  border-radius: 36px;
+  padding: 20px 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 168, 225, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.remote-simulator.minimized {
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.remote-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.remote-logo {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #AAA;
+}
+
+.remote-logo span {
+  color: var(--amazon-orange);
+}
+
+.close-remote {
+  background: none;
+  border: none;
+  color: #777;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.close-remote:hover {
+  color: #FFF;
+}
+
+.remote-voice-btn {
+  background: #25282F;
+  border: 1px solid #3A3E47;
+  color: #00A8E1;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.remote-voice-btn:hover {
+  background: #2D323C;
+}
+
+/* D-Pad Styling */
+.dpad-container {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: #23272F;
+  border: 3px solid #3A3F4B;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.dpad-btn {
+  background: none;
+  border: none;
+  color: #CBD5E1;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dpad-btn:hover,
+.dpad-btn:active {
+  color: var(--amazon-cyan);
+  transform: scale(1.2);
+}
+
+.dpad-middle-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dpad-center {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #323846;
+  border: 2px solid #474E5F;
+  color: #FFF;
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+}
+
+.dpad-center:hover,
+.dpad-center:active {
+  background: var(--amazon-cyan);
+  color: #000;
+  transform: scale(1.05);
+}
+
+.remote-utility-row {
+  display: flex;
+  gap: 12px;
+}
+
+.util-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #23272F;
+  border: 1px solid #3A3E47;
+  color: #AAA;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.util-btn:hover,
+.util-btn:active {
+  background: #323846;
+  color: #FFF;
+}
+
+.remote-footer-tip {
+  font-size: 0.7rem;
+  color: #718096;
+  text-align: center;
+  line-height: 1.3;
+}

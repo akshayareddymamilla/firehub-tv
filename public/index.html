@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FireHub — Smart Ambient TV Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- TV Safe Zone Container (5% overscan margin for living room screens) -->
+  <div class="tv-canvas">
+
+    <!-- Ambient Background Layer -->
+    <div class="ambient-layer" id="ambientLayer"></div>
+
+    <!-- Top Header: TV Status & Live Clock -->
+    <header class="tv-header">
+      <div class="brand">
+        <span class="fire-badge">FIRE TV</span>
+        <h1 class="brand-title">Fire<span>Hub</span></h1>
+      </div>
+
+      <div class="clock-widget">
+        <div class="time" id="currentTime">12:00<span class="seconds">:00</span></div>
+        <div class="date" id="currentDate">Wednesday, October 14, 2026</div>
+      </div>
+
+      <div class="system-status">
+        <div class="status-pill active">
+          <span class="pulse-dot"></span>
+          <span>Ambient Mode: ON</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main 10-Foot UI Interactive Grid -->
+    <main class="dashboard-grid">
+
+      <!-- Column 1: Weather & Environment Card -->
+      <section class="card focusable" tabindex="0" data-row="0" data-col="0" id="card-weather">
+        <div class="card-header">
+          <span class="card-tag">ENVIRONMENT</span>
+          <span class="card-icon">🌤️</span>
+        </div>
+        <div class="weather-hero">
+          <div class="weather-temp" id="weatherTemp">72°F</div>
+          <div class="weather-condition" id="weatherCondition">Partly Cloudy</div>
+        </div>
+        <div class="weather-details">
+          <div class="stat"><span>Humidity:</span> <strong id="humidity">48%</strong></div>
+          <div class="stat"><span>Air Quality:</span> <strong class="good-badge">Good (AQI 28)</strong></div>
+        </div>
+        <div class="card-action-hint">Press <b>SELECT</b> to refresh</div>
+      </section>
+
+      <!-- Column 2: Today's Household Focus & Tasks -->
+      <section class="card focusable" tabindex="0" data-row="0" data-col="1" id="card-tasks">
+        <div class="card-header">
+          <span class="card-tag">DAILY FOCUS</span>
+          <span class="card-count" id="taskCount">2 of 3 Completed</span>
+        </div>
+        <ul class="task-list" id="taskList">
+          <li class="task-item completed" data-id="1">
+            <span class="check-box">✓</span>
+            <span class="task-title">Review morning team sync updates</span>
+          </li>
+          <li class="task-item completed" data-id="2">
+            <span class="check-box">✓</span>
+            <span class="task-title">Water porch plants & check package box</span>
+          </li>
+          <li class="task-item" data-id="3">
+            <span class="check-box">○</span>
+            <span class="task-title">Prepare dinner & family study time</span>
+          </li>
+        </ul>
+        <div class="card-action-hint">Press <b>SELECT</b> to toggle task status</div>
+      </section>
+
+      <!-- Column 3: Family Sticky Note & Bulletin -->
+      <section class="card focusable" tabindex="0" data-row="0" data-col="2" id="card-notes">
+        <div class="card-header">
+          <span class="card-tag">FAMILY BULLETIN</span>
+          <span class="card-icon">📌</span>
+        </div>
+        <div class="note-content">
+          <p class="note-quote">"Don't forget: Groceries arriving around 4:30 PM. Front gate code is updated to #2026."</p>
+          <div class="note-author">— Pinned by Mom &bull; 2h ago</div>
+        </div>
+        <div class="quick-tags">
+          <span class="tag">#Home</span>
+          <span class="tag">#Deliveries</span>
+        </div>
+        <div class="card-action-hint">Press <b>SELECT</b> to cycle notes</div>
+      </section>
+
+    </main>
+
+    <!-- Bottom AI Briefing Banner (AWS Builder Mini-Challenge Module) -->
+    <footer class="ai-briefing-card focusable" tabindex="0" data-row="1" data-col="0" id="card-briefing">
+      <div class="briefing-badge">
+        <span class="sparkle">✨</span> AWS BEDROCK BRIEFING
+      </div>
+      <div class="briefing-text" id="briefingText">
+        "Good morning! Optimal conditions today for outdoor focus before 3 PM. Remember to review your project roadmap and take scheduled rest intervals."
+      </div>
+      <div class="briefing-action">
+        <span>Press <b>SELECT</b> for fresh insights</span>
+      </div>
+    </footer>
+
+    <!-- TV Remote Help Bar -->
+    <div class="tv-helper-bar">
+      <div class="help-item"><span class="key-pill">▲ ▼ ◄ ►</span> Navigate</div>
+      <div class="help-item"><span class="key-pill">ENTER</span> Select / Toggle</div>
+      <div class="help-item"><span class="key-pill">BACK / ESC</span> Reset View</div>
+      <div class="help-item remote-toggle-pill" id="remoteToggleBtn"><span class="key-pill">🎮</span> Toggle On-Screen Remote</div>
+    </div>
+
+  </div>
+
+  <!-- On-Screen Virtual Fire TV Remote Controller (Simulator for Laptops) -->
+  <aside class="remote-simulator" id="remoteSimulator">
+    <div class="remote-header">
+      <span class="remote-logo">amazon <span>fire tv</span></span>
+      <button class="close-remote" id="closeRemoteBtn">✕</button>
+    </div>
+    
+    <div class="remote-voice-btn">
+      <span class="mic-icon">🎙️</span>
+      <span class="mic-label">Alexa Voice</span>
+    </div>
+
+    <!-- 5-Way Directional D-Pad -->
+    <div class="dpad-container">
+      <button class="dpad-btn dpad-up" id="btnUp" title="Up Arrow">▲</button>
+      <div class="dpad-middle-row">
+        <button class="dpad-btn dpad-left" id="btnLeft" title="Left Arrow">◄</button>
+        <button class="dpad-btn dpad-center" id="btnSelect" title="Select / Enter">OK</button>
+        <button class="dpad-btn dpad-right" id="btnRight" title="Right Arrow">►</button>
+      </div>
+      <button class="dpad-btn dpad-down" id="btnDown" title="Down Arrow">▼</button>
+    </div>
+
+    <!-- Standard Fire TV Functional Buttons -->
+    <div class="remote-utility-row">
+      <button class="util-btn" id="btnBack" title="Back">⮌</button>
+      <button class="util-btn" id="btnHome" title="Home">🏠</button>
+      <button class="util-btn" id="btnMenu" title="Menu">☰</button>
+    </div>
+
+    <div class="remote-footer-tip">
+      💡 Click buttons or use your <b>Keyboard Arrow Keys</b>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
